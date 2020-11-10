@@ -1,6 +1,6 @@
 name: Build
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -9,7 +9,8 @@ jobs:
     strategy:
       matrix:
         target: [
-          { id: 'darwin-amd64', os: 'macos-latest' }
+          { id: 'linux-amd64', os: 'ubuntu-latest' },
+          { id: 'darwin-amd64', os: 'macos-latest' },
         ]
       fail-fast: true
 
@@ -21,7 +22,13 @@ jobs:
         with:
           submodules: true
 
-      - name: Install `ninja`
+      - name: Install `ninja` on Ubuntu
+        if: startsWith(matrix.target.id, 'linux-')
+        shell: bash
+        run: |
+          sudo apt-get install ninja-build
+
+      - name: Install `ninja` on macOS
         if: startsWith(matrix.target.id, 'darwin-')
         shell: bash
         run: |
