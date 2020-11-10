@@ -13,27 +13,27 @@ jobs:
         ]
       fail-fast: true
 
-      runs-on: ${{ matrix.target.os }}
+    runs-on: ${{ matrix.target.os }}
 
-      steps:
-        - name: Check out the code
-          uses: actions/checkout@v2
-          with:
-            submodules: true
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+        with:
+          submodules: true
 
-        - name: Install `ninja`
-          if: startsWith(matrix.target.id, 'darwin-')
-          shell: bash
-          run: |
-            brew install ninja
+      - name: Install `ninja`
+        if: startsWith(matrix.target.id, 'darwin-')
+        shell: bash
+        run: |
+          brew install ninja
 
-        - name: Build
-          shell: bash
-          run: |
-            ./build.sh
+      - name: Build
+        shell: bash
+        run: |
+          ./build.sh
 
-        - name: Inspect
-          shell: bash
-          run: |
-            ls -laGi ./llvm-project/build/bin/
-            ./llvm-project/build/bin/clang --version
+      - name: Inspect
+        shell: bash
+        run: |
+          ls -laGi ./llvm-project/build/bin/
+          ./llvm-project/build/bin/clang --version
