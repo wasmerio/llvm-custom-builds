@@ -11,6 +11,7 @@ jobs:
         target: [
           { id: 'linux-amd64', os: 'ubuntu-latest' },
           { id: 'darwin-amd64', os: 'macos-latest' },
+          { id: 'windows-amd64', os: 'windows-latest' },
         ]
       fail-fast: true
 
@@ -33,6 +34,12 @@ jobs:
         shell: bash
         run: |
           brew install ninja
+
+      - name: Install `ninja` on Windows
+        if: startsWith(matrix.target.id, 'windows-')
+        shell: bash
+        run: |
+          choco install ninja
 
       - name: Build
         shell: bash
