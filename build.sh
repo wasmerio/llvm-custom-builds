@@ -11,6 +11,7 @@ cd build
 cmake \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
+  -DLLVM_ENABLE_LTO="Thin" \
   -DLLVM_ENABLE_PROJECTS="clang" \
   -DLLVM_ENABLE_TERMINFO=OFF \
   -DLLVM_ENABLE_ZLIB=OFF \
