@@ -10,18 +10,15 @@ cd llvm-project
 mkdir build
 cd build
 
+# Create a directory to receive the complete installation.
+mkdir install
+
 # Adjust compilation based on the OS.
 CMAKE_ARGUMENTS=""
 
 case "${OSTYPE}" in
-    darwin*)
-        CMAKE_ARGUMENTS="${CMAKE_ARGUMENTS}
-  -DLLVM_ENABLE_LTO=\"Thin\""
-    ;;
-    linux*)
-        CMAKE_ARGUMENTS="${CMAKE_ARGUMENTS}
-  -DLLVM_ENABLE_LTO=\"Thin\""
-    ;;
+    darwin*) ;;
+    linux*) ;;
     msys*) ;;
     *) ;;
 esac
@@ -30,6 +27,7 @@ esac
 cmake \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX="install"
   -DLLVM_ENABLE_PROJECTS="clang" \
   -DLLVM_ENABLE_TERMINFO=OFF \
   -DLLVM_ENABLE_ZLIB=OFF \
@@ -45,4 +43,4 @@ cmake \
   ../llvm
 
 # Showtime!
-ninja
+ninja install
