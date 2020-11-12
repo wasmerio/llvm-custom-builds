@@ -27,7 +27,7 @@ esac
 cmake \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX="install"
+  -DCMAKE_INSTALL_PREFIX="install" \
   -DLLVM_ENABLE_PROJECTS="clang" \
   -DLLVM_ENABLE_TERMINFO=OFF \
   -DLLVM_ENABLE_ZLIB=OFF \
