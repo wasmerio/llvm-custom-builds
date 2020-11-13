@@ -49,5 +49,5 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
-          ls -laGi ./llvm-project/build/bin/
-          ./llvm-project/build/bin/clang --version
+          ls -laGi ./llvm-project/build/install/*
+          ./llvm-project/build/install/bin/clang --version
