@@ -79,7 +79,7 @@ jobs:
       - name: Zip
         shell: bash
         run: |
-          mv  llvm-project/build/install  llvm-project/build/llvm
+          mv llvm-project/build/install llvm-project/build/llvm
           mkdir dist
           tar -C llvm-project/build/llvm -zcvf dist/llvm.tar.gz .
 
