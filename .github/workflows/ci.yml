@@ -3,8 +3,31 @@ name: Build
 on: [push]
 
 jobs:
+  setup:
+    name: Set up
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      VERSION: ${{ steps.setup.outputs.VERSION }}
+      DOING_RELEASE: ${{ steps.setup.outputs.DOING_RELEASE }}
+
+    steps:
+      - name: Set environment variables
+        id: setup
+        shell: bash
+        run: |
+          VERSION=${GITHUB_REF/refs\/tags\//}
+          echo ::set-output name=VERSION::${VERSION}
+          DOING_RELEASE=$(echo $VERSION | grep -c '[0-9]\+\.x' || true)
+          echo ::set-output name=DOING_RELEASE::${DOING_RELEASE}
+          echo Version: ${VERSION}
+          echo Doing release: ${DOING_RELEASE}
+
   build:
     name: Build
+
+    needs: [setup]
 
     strategy:
       matrix:
@@ -49,5 +72,84 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
-          ls -laGi ./llvm-project/build/install/*
-          ./llvm-project/build/install/bin/clang --version
+          ls -laGiR llvm-project/build/install/*
+          llvm-project/build/install/bin/llvm-config --version
+          llvm-project/build/install/bin/clang --version
+
+      - name: Zip
+        shell: bash
+        run: |
+          mv llvm-project/build/install llvm-project/build/llvm
+          mkdir dist
+          tar -C llvm-project/build/llvm -zcvf dist/llvm.tar.gz .
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.target.id }}
+          path: dist
+          if-no-files-found: error
+          retention-days: 1
+
+  release:
+    name: Release
+
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.DOING_RELEASE == '1'
+
+    needs: [setup, build]
+
+    steps:
+      - name: Download the Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Inspect
+        shell: bash
+        run: |
+          ls -laGiR ./*
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.setup.outputs.VERSION }}
+          release_name: Release ${{ needs.setup.outputs.VERSION }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset Linux
+        id: upload-release-asset-linux
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-amd64/llvm.tar.gz
+          asset_name: linux-amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset Darwin
+        id: upload-release-asset-darwin
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/darwin-amd64/llvm.tar.gz
+          asset_name: darwin-amd64.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset Windows
+        id: upload-release-asset-windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/windows-amd64/llvm.tar.gz
+          asset_name: windows-amd64.tar.gz
+          asset_content_type: application/gzip
