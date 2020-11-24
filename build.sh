@@ -1,13 +1,36 @@
 #!/bin/bash
 
 # Display all commands before executing them.
-set -o xtrace
+set -o errexit
+set -o errtrace
 
-# Enter the LLVM project.
+LLVM_VERSION=$1
+LLVM_REPO_URL=${2:-https://github.com/llvm/llvm-project.git}
+
+if [[ -z "$LLVM_REPO_URL" || -z "$LLVM_VERSION" ]]
+then
+  echo "Usage: $0 <llvm-version> <llvm-repository-url>"
+  echo
+  echo "# Arguments"
+  echo "  llvm-version         The name of a LLVM release branch without the \`release/\` prefix"
+  echo "  llvm-repository-url  The URL used to clone LLVM sources (default: https://github.com/llvm/llvm-project.git)"
+
+  exit 1
+fi
+
+# Clone the LLVM project.
+if [ ! -d llvm-project ]
+then
+  git clone "$LLVM_REPO_URL" llvm-project
+fi
+
+
 cd llvm-project
+git fetch origin
+git checkout "release/$LLVM_VERSION"
 
 # Create a directory to build the project.
-mkdir build
+mkdir -p build
 cd build
 
 # Create a directory to receive the complete installation.
