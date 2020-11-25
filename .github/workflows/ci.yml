@@ -113,6 +113,16 @@ jobs:
           asset_name: linux-amd64.tar.gz
           asset_content_type: application/gzip
 
+      - name: Upload Release Asset Linux (ARM64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.gz
+          asset_name: linux-aarch64.tar.gz
+          asset_content_type: application/gzip
+
       - name: Upload Release Asset Darwin
         uses: actions/upload-release-asset@v1
         env:
