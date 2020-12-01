@@ -12,7 +12,7 @@ then
   echo "Usage: $0 <llvm-version> <llvm-repository-url>"
   echo
   echo "# Arguments"
-  echo "  llvm-version         The name of a LLVM release branch without the \`release/\` prefix"
+  echo "  llvm-version         The name of a LLVM release branch without the 'release/' prefix"
   echo "  llvm-repository-url  The URL used to clone LLVM sources (default: https://github.com/llvm/llvm-project.git)"
 
   exit 1
@@ -28,6 +28,7 @@ fi
 cd llvm-project
 git fetch origin
 git checkout "release/$LLVM_VERSION"
+git reset --hard origin/"release/$LLVM_VERSION"
 
 # Create a directory to build the project.
 mkdir -p build
@@ -42,7 +43,6 @@ CMAKE_ARGUMENTS=""
 case "${OSTYPE}" in
     darwin*) ;;
     linux*) ;;
-    msys*) ;;
     *) ;;
 esac
 
