@@ -43,9 +43,15 @@ jobs:
           choco install ninja
 
       - name: Build
+        if: matrix.target.id != 'windows-amd64'
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
+
+      - name: Build (Windows)
+        if: matrix.target.id == 'windows-amd64'
+        run: |
+          ./build.cmd ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
 
       - name: Inspect
         shell: bash
