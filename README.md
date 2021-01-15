@@ -29,11 +29,11 @@
 > Go along your path, this is a dangerous place.
 
 This repository contains a small `build.sh` (or `build.ps1` for Windows 
-PowerShell) script that builds LLVM. The version of LLVM is defined by 
-the `.gitmodules` file. The build is run by [Github
-Actions](https://github.com/wasmerio/llvm-custom-builds/actions) on 3
-platforms: Linux (Ubuntu), Darwin (macOS), and Windows, all
-AMD64. Builds are attached to [Github releases as
+PowerShell) script that builds LLVM. The version of LLVM is defined in the CI script.
+The build is run by [Github
+Actions](https://github.com/wasmerio/llvm-custom-builds/actions) on 4
+platforms: Linux (Ubuntu, amd64 and aarch64), Darwin (macOS), and Windows.
+Builds are attached to [Github releases as
 assets](https://github.com/wasmerio/llvm-custom-builds/releases).
 
 ## Prebuilds
@@ -49,7 +49,7 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
   </thead>
   <tbody>
     <tr>
-      <td rowspan="3">11</td>
+      <td rowspan="4">11</td>
       <td rowspan="3">amd64</td>
       <td>Darwin</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/11.x/darwin-amd64.tar.gz">download</a></td>
@@ -63,7 +63,12 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/11.x/windows-amd64.tar.gz">download</a></td>
     </tr>
     <tr>
-      <td rowspan="3">10</td>
+      <td>aarch64</td>
+      <td>Linux</td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/11.x/linux-aarch64.tar.gz">download</a></td>
+    </tr>
+    <tr>
+      <td rowspan="4">10</td>
       <td rowspan="3">amd64</td>
       <td>Darwin</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/10.x/darwin-amd64.tar.gz">download</a></td>
@@ -75,6 +80,11 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
     <tr>
       <td>Windows</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/10.x/windows-amd64.tar.gz">download</a></td>
+    </tr>
+    <tr>
+      <td>aarch</td>
+      <td>Linux</td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/10.x/linux-aarch64.tar.gz">download</a></td>
     </tr>
   </tbody>
 </table>
