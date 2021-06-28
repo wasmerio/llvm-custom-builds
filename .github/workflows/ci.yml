@@ -12,16 +12,16 @@ jobs:
           - id: 'linux-amd64'
             os: 'ubuntu-latest'
             llvm_prefix: llvm-project/build/install
-          - id: 'linux-aarch64'
-            os: ['self-hosted', 'linux', 'ARM64']
-            llvm_prefix: llvm-project/build/install
+          #- id: 'linux-aarch64'
+          #  os: ['self-hosted', 'linux', 'ARM64']
+          #  llvm_prefix: llvm-project/build/install
           - id: 'darwin-amd64'
             os: 'macos-latest'
             llvm_prefix: llvm-project/build/install
           - id: 'windows-amd64'
             os: 'windows-2016'
             llvm_prefix: llvm-project/build/Release
-        llvm_version: ['10.x', '11.x']
+        llvm_version: ['10.x', '11.x', '12.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
 
@@ -94,7 +94,7 @@ jobs:
 
     strategy:
       matrix:
-        llvm_version: ['10.x', '11.x']
+        llvm_version: ['10.x', '11.x', '12.x']
 
     steps:
       - name: Download the Artifacts
@@ -128,15 +128,15 @@ jobs:
           asset_name: linux-amd64.tar.gz
           asset_content_type: application/gzip
 
-      - name: Upload Release Asset Linux (ARM64)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.gz
-          asset_name: linux-aarch64.tar.gz
-          asset_content_type: application/gzip
+      #- name: Upload Release Asset Linux (ARM64)
+      #  uses: actions/upload-release-asset@v1
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  with:
+      #    upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #    asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.gz
+      #    asset_name: linux-aarch64.tar.gz
+      #    asset_content_type: application/gzip
 
       - name: Upload Release Asset Darwin
         uses: actions/upload-release-asset@v1
