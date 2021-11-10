@@ -21,7 +21,7 @@ jobs:
           - id: 'windows-amd64'
             os: 'windows-2016'
             llvm_prefix: llvm-project/build/Release
-        llvm_version: ['10.x', '11.x', '12.x']
+        llvm_version: ['11.x', '12.x', '13.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
 
@@ -94,7 +94,7 @@ jobs:
 
     strategy:
       matrix:
-        llvm_version: ['10.x', '11.x', '12.x']
+        llvm_version: ['11.x', '12.x', '13.x']
 
     steps:
       - name: Download the Artifacts
