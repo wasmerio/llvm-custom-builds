@@ -109,12 +109,13 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ matrix.llvm_version }}
-          release_name: Release ${{ matrix.llvm_version }}
+          allowUpdates: true
+          tag: ${{ matrix.llvm_version }}
+          name: Release ${{ matrix.llvm_version }}
           draft: false
           prerelease: false
 
