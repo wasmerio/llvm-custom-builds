@@ -113,7 +113,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # tag: ${{ matrix.llvm_version }}
+          tag: ${{ matrix.llvm_version }}
           name: Release ${{ matrix.llvm_version }}
           allowUpdates: true
           draft: false
