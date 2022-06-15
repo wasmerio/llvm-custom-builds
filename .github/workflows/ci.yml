@@ -11,16 +11,21 @@ jobs:
         target:
           - id: 'linux-amd64'
             os: 'ubuntu-18.04'
-            llvm_prefix: llvm-project/build/install
+            tar_extra_args: ''
           #- id: 'linux-aarch64'
           #  os: ['self-hosted', 'linux', 'ARM64']
-          #  llvm_prefix: llvm-project/build/install
           - id: 'darwin-amd64'
             os: 'macos-latest'
-            llvm_prefix: llvm-project/build/install
+            tar_extra_args: ''
           - id: 'windows-amd64'
             os: 'windows-2016'
-            llvm_prefix: llvm-project/build/Release
+            # When unpacking an archive on Windows, the symlinks can't be
+            # created unless the target path already exists. This causes
+            # problems when the linked file is ordered after the link
+            # inside the archive. Dereferencing the files when packing them
+            # adds an additional copy per link, but it reliably works and
+            # the additional size is not too large on Windows.
+            tar_extra_args: '--dereference'
         llvm_version: ['13.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
@@ -66,15 +71,14 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
-          ${{ matrix.target.llvm_prefix }}/bin/llvm-config --version
-          ${{ matrix.target.llvm_prefix }}/bin/clang --version
+          llvm-project/build/destdir/bin/llvm-config --version
+          llvm-project/build/destdir/bin/clang --version
 
       - name: Zip
         shell: bash
         run: |
-          mv ${{ matrix.target.llvm_prefix }} llvm-project/build/llvm
-          mkdir dist
-          tar -C llvm-project/build/llvm -cJvf dist/llvm.tar.xz .
+          mkdir -p dist
+          tar --directory llvm-project/build/destdir --create --xz --verbose ${{ matrix.target.tar_extra_args }} --file dist/llvm.tar.xz .
           ls -lh dist/llvm.tar.xz
 
       - name: Upload Artifacts
