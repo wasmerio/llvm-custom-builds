@@ -39,7 +39,7 @@ $CMAKE_ARGUMENTS = ""
 cmake `
   -G "Visual Studio 15 2017 Win64" `
   -DCMAKE_BUILD_TYPE=MinSizeRel `
-  -DCMAKE_INSTALL_PREFIX=install `
+  -DCMAKE_INSTALL_PREFIX=destdir `
   -DLLVM_ENABLE_PROJECTS="clang;lld" `
   -DLLVM_ENABLE_TERMINFO=OFF `
   -DLLVM_ENABLE_ZLIB=OFF `
@@ -55,4 +55,11 @@ cmake `
   ../llvm
 
 # Showtime!
-cmake --build . --config Release --target INSTALL
+cmake --build . --config Release
+
+# Not using DESTDIR here, quote from
+# https://cmake.org/cmake/help/latest/envvar/DESTDIR.html
+# > `DESTDIR` may not be used on Windows because installation prefix
+# > usually contains a drive letter like in `C:/Program Files` which cannot
+# > be prepended with some other prefix.
+cmake --install . --strip --config Release

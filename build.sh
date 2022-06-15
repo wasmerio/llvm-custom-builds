@@ -50,7 +50,7 @@ esac
 cmake \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
-  -DCMAKE_INSTALL_PREFIX="install" \
+  -DCMAKE_INSTALL_PREFIX="/" \
   -DLLVM_ENABLE_PROJECTS="clang;lld" \
   -DLLVM_ENABLE_TERMINFO=OFF \
   -DLLVM_ENABLE_ZLIB=OFF \
@@ -66,4 +66,5 @@ cmake \
   ../llvm
 
 # Showtime!
-ninja install
+cmake --build . --config Release
+DESTDIR=destdir cmake --install . --strip --config Release
