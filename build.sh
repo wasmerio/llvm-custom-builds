@@ -6,14 +6,16 @@ set -o errtrace
 
 LLVM_VERSION=$1
 LLVM_REPO_URL=${2:-https://github.com/llvm/llvm-project.git}
+LLVM_CROSS="$3"
 
 if [[ -z "$LLVM_REPO_URL" || -z "$LLVM_VERSION" ]]
 then
-  echo "Usage: $0 <llvm-version> <llvm-repository-url>"
+  echo "Usage: $0 <llvm-version> <llvm-repository-url> [aarch64]"
   echo
   echo "# Arguments"
   echo "  llvm-version         The name of a LLVM release branch without the 'release/' prefix"
   echo "  llvm-repository-url  The URL used to clone LLVM sources (default: https://github.com/llvm/llvm-project.git)"
+  echo "  aarch64              To cross-compile an aarch64 version of LLVM"
 
   exit 1
 fi
@@ -46,6 +48,13 @@ case "${OSTYPE}" in
     *) ;;
 esac
 
+# Adjust cross compilation
+CROSS_COMPILE=""
+
+case "${LLVM_CROSS}" in
+    aarch64) CROSS_COMPILE="-DLLVM_HOST_TRIPLE=aarch64-linux-gnu" ;;
+    *) ;;
+
 # Run `cmake` to configure the project.
 cmake \
   -G Ninja \
@@ -62,6 +71,7 @@ cmake \
   -DLLVM_INCLUDE_UTILS=OFF \
   -DLLVM_OPTIMIZED_TABLEGEN=ON \
   -DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
+  "${CROSS_COMPILE}" \
   "${CMAKE_ARGUMENTS}" \
   ../llvm
 

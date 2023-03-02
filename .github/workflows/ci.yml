@@ -10,9 +10,10 @@ jobs:
       matrix:
         target:
           - id: 'linux-amd64'
-            os: 'ubuntu-18.04'
+            os: 'ubuntu-20.04'
             tar_extra_args: ''
-          #- id: 'linux-aarch64'
+          - id: 'linux-aarch64'
+            os: "ubuntu-latest"
           #  os: ['self-hosted', 'linux', 'ARM64']
           - id: 'darwin-amd64'
             os: 'macos-latest'
@@ -34,13 +35,19 @@ jobs:
 
     steps:
       - name: Check out the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install `ninja` on Ubuntu
-        if: matrix.target.id == 'linux-amd64'
+        if: startsWith(matrix.target.id, 'linux-')
         shell: bash
         run: |
-          sudo apt-get install ninja-build
+          sudo apt-get install ninja-build -y
+      
+      - name: Install cross-compilatio tools
+        if: matrix.target.id == 'linux-aarch64'
+        shell: bash
+        run: |
+          sudo apt-get install gcc-12-aarch64-linux-gnu g++-12-aarch64-linux-gnu gcc-12-multilib binutils-aarch64-linux-gnu libgcc-12-dev-arm64-cross libstdc++6-arm64-cross -y
 
       - name: Install `ninja` on macOS
         if: startsWith(matrix.target.id, 'darwin-')
@@ -56,10 +63,16 @@ jobs:
       #     choco install ninja
 
       - name: Build
-        if: matrix.target.id != 'windows-amd64'
+        if: matrix.target.id != 'windows-amd64' && matrix.target.id != 'linux-aarch64'
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
+
+      - name: Build (linux-aarch64)
+        if: matrix.target.id == 'linux-aarch64'
+        shell: bash
+        run: |
+          ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }} aarch64
 
       - name: Build (Windows)
         if: matrix.target.id == 'windows-amd64'
@@ -82,7 +95,7 @@ jobs:
           ls -lh dist/llvm.tar.xz
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.target.id }}-${{ matrix.llvm_version }}
           path: dist
@@ -103,7 +116,7 @@ jobs:
 
     steps:
       - name: Download the Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: artifacts
 
@@ -134,15 +147,15 @@ jobs:
           asset_name: llvm-linux-amd64.tar.xz
           asset_content_type: application/gzip
 
-      #- name: Upload Release Asset Linux (ARM64)
-      #  uses: actions/upload-release-asset@v1
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  with:
-      #    upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #    asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
-      #    asset_name: linux-aarch64.tar.xz
-      #    asset_content_type: application/gzip
+      - name: Upload Release Asset Linux (ARM64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: linux-aarch64.tar.xz
+          asset_content_type: application/gzip
 
       - name: Upload Release Asset Darwin
         uses: actions/upload-release-asset@v1
