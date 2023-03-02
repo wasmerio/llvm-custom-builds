@@ -52,8 +52,9 @@ esac
 CROSS_COMPILE=""
 
 case "${LLVM_CROSS}" in
-    aarch64) CROSS_COMPILE="-DLLVM_HOST_TRIPLE=aarch64-linux-gnu" ;;
+    aarch64*) CROSS_COMPILE="-DLLVM_HOST_TRIPLE=aarch64-linux-gnu" ;;
     *) ;;
+esac
 
 # Run `cmake` to configure the project.
 cmake \
