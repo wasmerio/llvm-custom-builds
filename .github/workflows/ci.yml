@@ -27,7 +27,7 @@ jobs:
             # adds an additional copy per link, but it reliably works and
             # the additional size is not too large on Windows.
             tar_extra_args: '--dereference'
-        llvm_version: ['13.x']
+        llvm_version: ['15.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
 
