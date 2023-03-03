@@ -40,7 +40,7 @@ $CROSS_COMPILE = ""
 
 # Run `cmake` to configure the project.
 cmake `
-  -G "Visual Studio 16 2019 Win64" `
+  -G "Visual Studio 16 2019" `
   -DCMAKE_BUILD_TYPE=MinSizeRel `
   -DCMAKE_INSTALL_PREFIX=destdir `
   -DLLVM_ENABLE_PROJECTS="clang;lld" `
