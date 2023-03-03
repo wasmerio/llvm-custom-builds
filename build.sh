@@ -77,5 +77,5 @@ cmake \
   ../llvm
 
 # Showtime!
-cmake --build . --config Release
-DESTDIR=destdir cmake --install . --strip --config Release
+cmake --build . --config MinSizeRel
+DESTDIR=destdir cmake --install . --strip --config MinSizeRel
