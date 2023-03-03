@@ -35,6 +35,9 @@ New-Item -Path "install" -Force -ItemType "directory"
 # Adjust compilation based on the OS.
 $CMAKE_ARGUMENTS = ""
 
+# Adjust cross compilation
+$CROSS_COMPILE = ""
+
 # Run `cmake` to configure the project.
 cmake `
   -G "Visual Studio 15 2017 Win64" `
@@ -50,7 +53,8 @@ cmake `
   -DLLVM_INCLUDE_TOOLS=ON `
   -DLLVM_INCLUDE_UTILS=OFF `
   -DLLVM_OPTIMIZED_TABLEGEN=ON `
-  -DLLVM_TARGETS_TO_BUILD="X86;AArch64" `
+  -DLLVM_TARGETS_TO_BUILD="X86;AArch64;RISCV" `
+  $CROSS_COMPILE `
   $CMAKE_ARGUMENTS `
   ../llvm
 
