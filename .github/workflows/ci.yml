@@ -138,33 +138,41 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset Linux
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          name: llvm-linux-amd64.tar.xz
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-linux-amd64.tar.xz
+          asset_content_type: application/gzip
 
       - name: Upload Release Asset Linux (ARM64)
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
-          name: linux-aarch64.tar.xz
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: linux-aarch64.tar.xz
+          asset_content_type: application/gzip
 
       - name: Upload Release Asset Darwin
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          name: llvm-darwin-amd64.tar.xz
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-darwin-amd64.tar.xz
+          asset_content_type: application/gzip
 
       - name: Upload Release Asset Windows
-        uses: softprops/action-gh-release@v1
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          name: llvm-windows-amd64.tar.xz
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-windows-amd64.tar.xz
+          asset_content_type: application/gzip
