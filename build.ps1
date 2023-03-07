@@ -67,3 +67,6 @@ cmake --build . --config Release
 # > usually contains a drive letter like in `C:/Program Files` which cannot
 # > be prepended with some other prefix.
 cmake --install . --strip --config Release
+
+# move usr/bin/* to bin/ or llvm-config will be broken
+move destdir\usr\bin\* destdir\bin\
