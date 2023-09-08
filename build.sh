@@ -82,4 +82,7 @@ cmake --build . --config MinSizeRel
 DESTDIR=destdir cmake --install . --strip --config MinSizeRel
 
 # move usr/bin/* to bin/ or llvm-config will be broken
+if [ ! -d destdir/bin ];then
+ mkdir destdir/bin
+fi
 mv destdir/usr/bin/* destdir/bin/
