@@ -15,6 +15,9 @@ jobs:
           - id: 'linux-aarch64'
             os: "ubuntu-latest"
           #  os: ['self-hosted', 'linux', 'ARM64']
+          - id: 'linux-riscv64'
+            os: "ubuntu-latest"
+          #  os: ['self-hosted', 'linux', 'RISCV64']
           - id: 'darwin-amd64'
             os: 'macos-latest'
             tar_extra_args: ''
@@ -27,7 +30,7 @@ jobs:
             # adds an additional copy per link, but it reliably works and
             # the additional size is not too large on Windows.
             tar_extra_args: '--dereference'
-        llvm_version: ['14.x']
+        llvm_version: ['15.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
 
@@ -49,6 +52,12 @@ jobs:
         run: |
           sudo apt-get install gcc-12-aarch64-linux-gnu g++-12-aarch64-linux-gnu gcc-12-multilib binutils-aarch64-linux-gnu libgcc-12-dev-arm64-cross libstdc++6-arm64-cross -y
 
+      - name: Install cross-compilatio tools
+        if: matrix.target.id == 'linux-riscv64'
+        shell: bash
+        run: |
+          sudo apt-get install gcc-12-riscv64-linux-gnu g++-12-riscv64-linux-gnu gcc-12-multilib binutils-riscv64-linux-gnu libgcc-12-dev-riscv64-cross libstdc++6-riscv64-cross -y
+
       - name: Install `ninja` on macOS
         if: startsWith(matrix.target.id, 'darwin-')
         shell: bash
@@ -63,7 +72,7 @@ jobs:
       #     choco install ninja
 
       - name: Build
-        if: matrix.target.id != 'windows-amd64' && matrix.target.id != 'linux-aarch64'
+        if: matrix.target.id != 'windows-amd64' && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
@@ -73,6 +82,12 @@ jobs:
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }} aarch64
+
+      - name: Build (linux-aarch64)
+        if: matrix.target.id == 'linux-riscv64'
+        shell: bash
+        run: |
+          ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }} riscv64
 
       - name: Build (Windows)
         if: matrix.target.id == 'windows-amd64'
@@ -155,6 +170,16 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
           asset_name: linux-aarch64.tar.xz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset Linux (RISCV64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: linux-riscv64.tar.xz
           asset_content_type: application/gzip
 
       - name: Upload Release Asset Darwin
