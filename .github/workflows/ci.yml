@@ -19,8 +19,14 @@ jobs:
             os: "ubuntu-latest"
           #  os: ['self-hosted', 'linux', 'RISCV64']
           - id: 'darwin-amd64'
+            os: 'macos-13'
+            tar_extra_args: ''
+          - id: 'darwin-aarch64'
             os: 'macos-latest'
             tar_extra_args: ''
+            # When unpacking an archive on Windows, the symlinks can't be
+            # created unless the target path already exists. This causes
+            # problems when the linked file is ordered after the link
           - id: 'windows-amd64'
             os: 'windows-2022'
             # When unpacking an archive on Windows, the symlinks can't be
