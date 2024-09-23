@@ -174,7 +174,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: linux-aarch64.tar.xz
+          asset_name: llvm-linux-aarch64.tar.xz
           asset_content_type: application/gzip
 
       - name: Upload Release Asset Linux (RISCV64)
@@ -184,7 +184,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: linux-riscv64.tar.xz
+          asset_name: llvm-linux-riscv64.tar.xz
           asset_content_type: application/gzip
 
       - name: Upload Release Asset Darwin
@@ -195,6 +195,16 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz
           asset_name: llvm-darwin-amd64.tar.xz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset Darwin (aarch64)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-darwin-aarch64.tar.xz
           asset_content_type: application/gzip
 
       - name: Upload Release Asset Windows
