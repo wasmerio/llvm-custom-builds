@@ -30,7 +30,7 @@ jobs:
             # adds an additional copy per link, but it reliably works and
             # the additional size is not too large on Windows.
             tar_extra_args: '--dereference'
-        llvm_version: ['16.x']
+        llvm_version: ['18.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
 
@@ -46,13 +46,13 @@ jobs:
         run: |
           sudo apt-get install ninja-build -y
       
-      - name: Install cross-compilatio tools
+      - name: Install cross-compilation tools
         if: matrix.target.id == 'linux-aarch64'
         shell: bash
         run: |
           sudo apt-get install gcc-12-aarch64-linux-gnu g++-12-aarch64-linux-gnu gcc-12-multilib binutils-aarch64-linux-gnu libgcc-12-dev-arm64-cross libstdc++6-arm64-cross -y
 
-      - name: Install cross-compilatio tools
+      - name: Install cross-compilation tools
         if: matrix.target.id == 'linux-riscv64'
         shell: bash
         run: |
@@ -127,7 +127,7 @@ jobs:
 
     strategy:
       matrix:
-        llvm_version: ['16.x']
+        llvm_version: ['18.x']
 
     steps:
       - name: Download the Artifacts
