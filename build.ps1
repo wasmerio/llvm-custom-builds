@@ -17,7 +17,7 @@ if ([string]::IsNullOrEmpty($LLVM_VERSION)) {
 
 # Clone the LLVM project.
 if (-not (Test-Path -Path "llvm-project" -PathType Container)) {
-	git clone "$LLVM_REPO_URL" llvm-project
+	git clone -b "release/$LLVM_VERSION" --single-branch --depth=1 "$LLVM_REPO_URL" llvm-project
 }
 
 Set-Location llvm-project
@@ -40,7 +40,7 @@ $CROSS_COMPILE = ""
 
 # Run `cmake` to configure the project.
 cmake `
-  -G "Visual Studio 16 2019" `
+  -G "Ninja" `
   -DCMAKE_BUILD_TYPE=MinSizeRel `
   -DCMAKE_INSTALL_PREFIX=destdir `
   -DLLVM_ENABLE_PROJECTS="clang;lld" `
@@ -48,7 +48,6 @@ cmake `
   -DLLVM_ENABLE_ZLIB=OFF `
   -DLLVM_INCLUDE_DOCS=OFF `
   -DLLVM_INCLUDE_EXAMPLES=OFF `
-  -DLLVM_INCLUDE_GO_TESTS=OFF `
   -DLLVM_INCLUDE_TESTS=OFF `
   -DLLVM_INCLUDE_TOOLS=ON `
   -DLLVM_INCLUDE_UTILS=OFF `

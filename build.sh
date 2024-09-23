@@ -23,7 +23,7 @@ fi
 # Clone the LLVM project.
 if [ ! -d llvm-project ]
 then
-  git clone "$LLVM_REPO_URL" llvm-project
+	git clone -b "release/$LLVM_VERSION" --single-branch --depth=1 "$LLVM_REPO_URL" llvm-project
 fi
 
 
@@ -67,7 +67,6 @@ cmake \
   -DLLVM_ENABLE_ZLIB=OFF \
   -DLLVM_INCLUDE_DOCS=OFF \
   -DLLVM_INCLUDE_EXAMPLES=OFF \
-  -DLLVM_INCLUDE_GO_TESTS=OFF \
   -DLLVM_INCLUDE_TESTS=OFF \
   -DLLVM_INCLUDE_TOOLS=ON \
   -DLLVM_INCLUDE_UTILS=OFF \
