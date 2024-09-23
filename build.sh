@@ -23,7 +23,7 @@ fi
 # Clone the LLVM project.
 if [ ! -d llvm-project ]
 then
-  git clone "$LLVM_REPO_URL" llvm-project
+	git clone -b "release/$LLVM_VERSION" --single-branch --depth=1 "$LLVM_REPO_URL" llvm-project
 fi
 
 
@@ -62,15 +62,14 @@ cmake \
   -G Ninja \
   -DCMAKE_BUILD_TYPE=MinSizeRel \
   -DCMAKE_INSTALL_PREFIX="/" \
-  -DLLVM_ENABLE_PROJECTS="clang;lld" \
+  -DLLVM_ENABLE_PROJECTS="polly;lldb;lld;compiler-rt;clang-tools-extra;clang" \
   -DLLVM_ENABLE_TERMINFO=OFF \
   -DLLVM_ENABLE_ZLIB=OFF \
   -DLLVM_INCLUDE_DOCS=OFF \
   -DLLVM_INCLUDE_EXAMPLES=OFF \
-  -DLLVM_INCLUDE_GO_TESTS=OFF \
   -DLLVM_INCLUDE_TESTS=OFF \
   -DLLVM_INCLUDE_TOOLS=ON \
-  -DLLVM_INCLUDE_UTILS=OFF \
+  -DLLVM_INCLUDE_UTILS=ON \
   -DLLVM_OPTIMIZED_TABLEGEN=ON \
   -DLLVM_TARGETS_TO_BUILD="X86;AArch64;RISCV;WebAssembly" \
   "${CROSS_COMPILE}" \

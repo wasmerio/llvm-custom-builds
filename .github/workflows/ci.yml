@@ -22,7 +22,7 @@ jobs:
             os: 'macos-latest'
             tar_extra_args: ''
           - id: 'windows-amd64'
-            os: 'windows-2019'
+            os: 'windows-2022'
             # When unpacking an archive on Windows, the symlinks can't be
             # created unless the target path already exists. This causes
             # problems when the linked file is ordered after the link
@@ -64,12 +64,11 @@ jobs:
         run: |
           brew install ninja
 
-      # TODO(jubianchi): Re-enable this to build on MingW
-      # - name: Install `ninja` on Windows
-      #   if: startsWith(matrix.target.id, 'windows-')
-      #   shell: bash
-      #   run: |
-      #     choco install ninja
+      - name: Install `ninja` on Windows
+        if: startsWith(matrix.target.id, 'windows-')
+        shell: bash
+        run: |
+          choco install ninja
 
       - name: Build
         if: matrix.target.id != 'windows-amd64' && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
