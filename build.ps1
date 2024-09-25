@@ -38,7 +38,11 @@ $CMAKE_ARGUMENTS = ""
 # Adjust cross compilation
 $CROSS_COMPILE = ""
 
-# Run `cmake` to configure the project.
+# Run `cmake` to configure the project, using MSVC.
+$CMAKE_CXX_COMPILER="cl.exe"
+$CMAKE_C_COMPILER="cl.exe"
+$CMAKE_LINKER_TYPE="MSVC"
+
 cmake `
   -G "Ninja" `
   -DCMAKE_BUILD_TYPE=MinSizeRel `
@@ -46,8 +50,10 @@ cmake `
   -DLLVM_ENABLE_PROJECTS="clang;lld" `
   -DLLVM_ENABLE_TERMINFO=OFF `
   -DLLVM_ENABLE_ZLIB=OFF `
+  -DLLVM_ENABLE_LIBXML2=OFF `
   -DLLVM_INCLUDE_DOCS=OFF `
   -DLLVM_INCLUDE_EXAMPLES=OFF `
+  -DLLVM_INCLUDE_GO_TESTS=OFF `
   -DLLVM_INCLUDE_TESTS=OFF `
   -DLLVM_INCLUDE_TOOLS=ON `
   -DLLVM_INCLUDE_UTILS=OFF `
