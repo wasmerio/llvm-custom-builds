@@ -49,7 +49,7 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
   </thead>
   <tbody>
     <tr>
-      <td rowspan="5">18</td>
+      <td rowspan="6">18</td>
       <td rowspan="3">amd64</td>
       <td>Darwin</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/18.x/llvm-darwin-amd64.tar.xz">download</a></td>
@@ -66,14 +66,16 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
       <td rowspan="2">aarch64</td>
       <td>Linux</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/18.x/llvm-linux-aarch64.tar.xz">download</a></td>
+    </tr>
+    <tr>
       <td>Darwin</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/18.x/llvm-darwin-aarch64.tar.xz">download</a></td>
     </tr>
-    <tr>
+      </tr>
       <td>riscv64</td>
       <td>Linux</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/18.x/llvm-linux-riscv64.tar.xz">download</a></td>
-    </tr>
+      <tr>
     <tr>
       <td rowspan="5">16</td>
       <td rowspan="3">amd64</td>
