@@ -89,14 +89,8 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
         if: matrix.target.id == 'windows-amd64-msvc'
 
-      - name: Set up MinGW (Windows-mingw)
-        uses: egor-tensin/setup-mingw@v2
-        if: matrix.target.id == 'windows-amd64-mingw'
-        with:
-          platform: x64
-
       - name: Build
-        if: (!startsWith(matrix.target.id, 'windows')) && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
+        if: matrix.target.id != 'windows-amd64-msvc' && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
@@ -112,7 +106,6 @@ jobs:
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }} riscv64
-
      
       - name: Build (Windows-msvc)
         if: matrix.target.id == 'windows-amd64-msvc'
@@ -120,13 +113,6 @@ jobs:
         #  powershell -Command "& '{0}'"
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
-
-      - name: Build (Windows-mingw)
-        if: matrix.target.id == 'windows-amd64-mingw'
-        #shell: |
-        #  powershell -Command "& '{0}'"
-        run: |
-          ./build.ps1 ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
 
       - name: Inspect
         shell: bash
