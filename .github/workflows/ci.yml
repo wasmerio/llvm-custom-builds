@@ -9,25 +9,34 @@ jobs:
     strategy:
       matrix:
         target:
-          - id: 'linux-amd64'
-            os: 'ubuntu-20.04'
-            tar_extra_args: ''
-          - id: 'linux-aarch64'
-            os: "ubuntu-latest"
-          #  os: ['self-hosted', 'linux', 'ARM64']
-          - id: 'linux-riscv64'
-            os: "ubuntu-latest"
-          #  os: ['self-hosted', 'linux', 'RISCV64']
-          - id: 'darwin-amd64'
-            os: 'macos-13'
-            tar_extra_args: ''
-          - id: 'darwin-aarch64'
-            os: 'macos-latest'
-            tar_extra_args: ''
-            # When unpacking an archive on Windows, the symlinks can't be
-            # created unless the target path already exists. This causes
-            # problems when the linked file is ordered after the link
-          - id: 'windows-amd64'
+          #- id: 'linux-amd64'
+          #  os: 'ubuntu-20.04'
+          #  tar_extra_args: ''
+          #- id: 'linux-aarch64'
+          #  os: "ubuntu-latest"
+          ##  os: ['self-hosted', 'linux', 'ARM64']
+          #- id: 'linux-riscv64'
+          #  os: "ubuntu-latest"
+          ##  os: ['self-hosted', 'linux', 'RISCV64']
+          #- id: 'darwin-amd64'
+          #  os: 'macos-13'
+          #  tar_extra_args: ''
+          #- id: 'darwin-aarch64'
+          #  os: 'macos-latest'
+          #  tar_extra_args: ''
+          #  # When unpacking an archive on Windows, the symlinks can't be
+          #  # created unless the target path already exists. This causes
+          #  # problems when the linked file is ordered after the link
+          #- id: 'windows-amd64-msvc'
+          #  os: 'windows-2022'
+          #  # When unpacking an archive on Windows, the symlinks can't be
+          #  # created unless the target path already exists. This causes
+          #  # problems when the linked file is ordered after the link
+          #  # inside the archive. Dereferencing the files when packing them
+          #  # adds an additional copy per link, but it reliably works and
+          #  # the additional size is not too large on Windows.
+          #  tar_extra_args: '--dereference'
+          - id: 'windows-amd64-mingw'
             os: 'windows-2022'
             # When unpacking an archive on Windows, the symlinks can't be
             # created unless the target path already exists. This causes
@@ -36,6 +45,7 @@ jobs:
             # adds an additional copy per link, but it reliably works and
             # the additional size is not too large on Windows.
             tar_extra_args: '--dereference'
+
         llvm_version: ['18.x']
         llvm_repo_url: ['https://github.com/llvm/llvm-project.git']
       fail-fast: true
@@ -77,10 +87,16 @@ jobs:
           #    choco install ninja
       - name: Setup MSVC (Windows) 
         uses: ilammy/msvc-dev-cmd@v1
-        if: matrix.target.id == 'windows-amd64'
+        if: matrix.target.id == 'windows-amd64-msvc'
+
+      - name: Set up MinGW (Windows-mingw)
+        uses: egor-tensin/setup-mingw@v2
+        if: matrix.target.id == 'windows-amd64-mingw'
+        with:
+          platform: x64
 
       - name: Build
-        if: matrix.target.id != 'windows-amd64' && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
+        if: (!startsWith(matrix.target.id, 'windows')) && matrix.target.id != 'linux-aarch64' && matrix.target.id != 'linux-riscv64'
         shell: bash
         run: |
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
@@ -98,8 +114,15 @@ jobs:
           ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }} riscv64
 
      
-      - name: Build (Windows)
-        if: matrix.target.id == 'windows-amd64'
+      - name: Build (Windows-msvc)
+        if: matrix.target.id == 'windows-amd64-msvc'
+        #shell: |
+        #  powershell -Command "& '{0}'"
+        run: |
+          ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
+
+      - name: Build (Windows-mingw)
+        if: matrix.target.id == 'windows-amd64-mingw'
         #shell: |
         #  powershell -Command "& '{0}'"
         run: |
@@ -211,12 +234,22 @@ jobs:
           asset_name: llvm-darwin-aarch64.tar.xz
           asset_content_type: application/gzip
 
-      - name: Upload Release Asset Windows
+      - name: Upload Release Asset Windows (msvc)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-windows-amd64.tar.xz
+          asset_path: artifacts/windows-amd64-msvc-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-windows-amd64-msvc.tar.xz
+          asset_content_type: application/gzip
+
+      - name: Upload Release Asset Windows (mingw)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: artifacts/windows-amd64-mingw-${{matrix.llvm_version}}/llvm.tar.xz
+          asset_name: llvm-windows-amd64-mingw.tar.xz
           asset_content_type: application/gzip
