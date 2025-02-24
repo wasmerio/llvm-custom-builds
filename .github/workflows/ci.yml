@@ -13,10 +13,10 @@ jobs:
             os: 'ubuntu-20.04'
             tar_extra_args: ''
           - id: 'linux-aarch64'
-            os: "ubuntu-latest"
+            os: "ubuntu-20.04"
           #  os: ['self-hosted', 'linux', 'ARM64']
           - id: 'linux-riscv64'
-            os: "ubuntu-latest"
+            os: "ubuntu-20.04"
           #  os: ['self-hosted', 'linux', 'RISCV64']
           - id: 'darwin-amd64'
             os: 'macos-13'
