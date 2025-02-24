@@ -113,7 +113,8 @@ jobs:
         #shell: |
         #  powershell -Command "& '{0}'"
         run: |
-          ./build.sh ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
+          ./build.ps1 ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
+
 
       - name: Inspect
         shell: bash
