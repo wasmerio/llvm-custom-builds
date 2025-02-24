@@ -66,13 +66,13 @@ jobs:
         if: matrix.target.id == 'linux-aarch64'
         shell: bash
         run: |
-          sudo apt-get install gcc-12-aarch64-linux-gnu g++-12-aarch64-linux-gnu gcc-12-multilib binutils-aarch64-linux-gnu libgcc-12-dev-arm64-cross libstdc++6-arm64-cross -y
+          sudo apt-get install gcc-10-aarch64-linux-gnu g++-10-aarch64-linux-gnu gcc-10-multilib binutils-aarch64-linux-gnu libgcc-10-dev-arm64-cross libstdc++6-arm64-cross -y
 
       - name: Install cross-compilation tools (linux-riscv64)
         if: matrix.target.id == 'linux-riscv64'
         shell: bash
         run: |
-          sudo apt-get install gcc-12-riscv64-linux-gnu g++-12-riscv64-linux-gnu gcc-12-multilib binutils-riscv64-linux-gnu libgcc-12-dev-riscv64-cross libstdc++6-riscv64-cross -y
+          sudo apt-get install gcc-10-riscv64-linux-gnu g++-10-riscv64-linux-gnu gcc-10-multilib binutils-riscv64-linux-gnu libgcc-10-dev-riscv64-cross libstdc++6-riscv64-cross -y
 
       - name: Install `ninja` on macOS
         if: startsWith(matrix.target.id, 'darwin-')
