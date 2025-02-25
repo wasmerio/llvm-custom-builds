@@ -119,8 +119,8 @@ jobs:
       - name: Inspect
         shell: bash
         run: |
-          PATH=llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH llvm-config --version
-          PATH=llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH clang --version
+          PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH llvm-config --version
+          PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH clang --version
 
       - name: Zip
         shell: bash
