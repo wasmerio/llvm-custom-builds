@@ -116,11 +116,11 @@ jobs:
           ./build.ps1 ${{ matrix.llvm_version }} ${{ matrix.llvm_repo_url }}
 
 
-      - name: Inspect
-        shell: bash
-        run: |
-          PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH llvm-config --version
-          PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH clang --version
+          #- name: Inspect
+          #  shell: bash
+          #  run: |
+          #    PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH llvm-config --version
+          #    PATH=llvm-project/build/destdir/Program:llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH clang --version
 
       - name: Zip
         shell: bash
