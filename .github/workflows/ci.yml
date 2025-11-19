@@ -10,7 +10,7 @@ jobs:
       matrix:
         target:
           - id: "linux-amd64"
-            os: "ubuntu-20.04"
+            os: "ubuntu-24.04"
             tar_extra_args: ""
           - id: "linux-aarch64"
             os: "ubuntu-24.04-arm"
@@ -55,7 +55,7 @@ jobs:
         if: matrix.target.id == 'linux-riscv64'
         shell: bash
         run: |
-          sudo apt-get install gcc-12-riscv64-linux-gnu g++-12-riscv64-linux-gnu gcc-12-multilib binutils-riscv64-linux-gnu libgcc-12-dev-riscv64-cross libstdc++6-riscv64-cross -y
+          sudo apt-get install gcc-13-riscv64-linux-gnu g++-13-riscv64-linux-gnu gcc-13-multilib binutils-riscv64-linux-gnu libgcc-13-dev-riscv64-cross libstdc++6-riscv64-cross -y
 
       - name: Install `ninja` on macOS
         if: startsWith(matrix.target.id, 'darwin-')
