@@ -13,7 +13,7 @@ jobs:
             os: "ubuntu-22.04"
             tar_extra_args: ""
           - id: "linux-aarch64"
-            os: "ubuntu-24.04-arm"
+            os: "ubuntu-22.04-arm"
           - id: "linux-riscv64"
             os: "ubuntu-latest"
           #  os: ['self-hosted', 'linux', 'RISCV64']
