@@ -135,74 +135,20 @@ jobs:
         run: |
           ls -laGiR ./*
 
+      - name: Prepare Upload Folder
+        shell: bash
+        run: |
+          mkdir upload
+          mv artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-amd64.tar.xz
+          mv artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-aarch64.tar.xz
+          mv artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-riscv64.tar.xz
+          mv artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-amd64.tar.xz
+          mv artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-aarch64.tar.xz
+          mv artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-windows-amd64.tar.xz
+
       - name: Create Release
-        id: create_release
-        uses: ncipollo/release-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag: ${{ matrix.llvm_version }}
           name: Release ${{ matrix.llvm_version }}
-          allowUpdates: true
-          draft: false
-          prerelease: false
-
-      - name: Upload Release Asset Linux
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-linux-amd64.tar.xz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset Linux (ARM64)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-linux-aarch64.tar.xz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset Linux (RISCV64)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-linux-riscv64.tar.xz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset Darwin
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-darwin-amd64.tar.xz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset Darwin (aarch64)
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-darwin-aarch64.tar.xz
-          asset_content_type: application/gzip
-
-      - name: Upload Release Asset Windows
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz
-          asset_name: llvm-windows-amd64.tar.xz
-          asset_content_type: application/gzip
+          tag_name: ${{ matrix.llvm_version }}
+          files: upload/*
