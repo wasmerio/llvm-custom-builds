@@ -139,16 +139,16 @@ jobs:
         shell: bash
         run: |
           mkdir upload
-          mv artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload
-          mv artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload
-          mv artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz upload
-          mv artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload
-          mv artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload
-          mv artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload
+          mv artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-amd64.tar.xz
+          mv artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-aarch64.tar.xz
+          mv artifacts/linux-riscv64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-riscv64.tar.xz
+          mv artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-amd64.tar.xz
+          mv artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-aarch64.tar.xz
+          mv artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-windows-amd64.tar.xz
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Testing Release ${{ matrix.llvm_version }}
+          name: Release ${{ matrix.llvm_version }}
           tag_name: ${{ matrix.llvm_version }}
           files: upload/*
