@@ -60,7 +60,7 @@ esac
 # Run `cmake` to configure the project.
 cmake \
   -G Ninja \
-  -DCMAKE_BUILD_TYPE=MinSizeRel \
+  -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX="/" \
   -DLLVM_ENABLE_PROJECTS="clang;lld" \
   -DLLVM_ENABLE_ZLIB=OFF \
@@ -76,8 +76,8 @@ cmake \
   ../llvm
 
 # Showtime!
-cmake --build . --config MinSizeRel
-DESTDIR=destdir cmake --install . --strip --config MinSizeRel
+cmake --build . --config Release
+DESTDIR=destdir cmake --install . --strip --config Release
 
 # move usr/bin/* to bin/ or llvm-config will be broken
 if [ ! -d destdir/bin ];then

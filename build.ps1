@@ -45,7 +45,7 @@ $CMAKE_LINKER_TYPE="MSVC"
 
 cmake `
   -G "Ninja" `
-  -DCMAKE_BUILD_TYPE=MinSizeRel `
+  -DCMAKE_BUILD_TYPE=Release `
   -DCMAKE_INSTALL_PREFIX=destdir `
   -DLLVM_ENABLE_PROJECTS="clang;lld" `
   -DLLVM_ENABLE_TERMINFO=OFF `
