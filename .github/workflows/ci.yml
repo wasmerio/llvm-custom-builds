@@ -122,7 +122,7 @@ jobs:
 
     strategy:
       matrix:
-        llvm_version: ["22.x"]
+        llvm_version: ["23.x"]
 
     steps:
       - name: Download the Artifacts
