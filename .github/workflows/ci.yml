@@ -45,11 +45,11 @@ jobs:
       - name: Check out the code
         uses: actions/checkout@v3
 
-      - name: Install `ninja` on Ubuntu
+      - name: Install build and compression tools on Ubuntu
         if: startsWith(matrix.target.id, 'linux-')
         shell: bash
         run: |
-          sudo apt-get install ninja-build -y
+          sudo apt-get install ninja-build zstd -y
 
       - name: Install cross-compilation tools
         if: matrix.target.id == 'linux-riscv64'
@@ -57,17 +57,18 @@ jobs:
         run: |
           sudo apt-get install gcc-13-riscv64-linux-gnu g++-13-riscv64-linux-gnu gcc-13-multilib binutils-riscv64-linux-gnu libgcc-13-dev-riscv64-cross libstdc++6-riscv64-cross -y
 
-      - name: Install `ninja` on macOS
+      - name: Install build and compression tools on macOS
         if: startsWith(matrix.target.id, 'darwin-')
         shell: bash
         run: |
-          brew install ninja
+          brew install ninja zstd
 
-          #- name: Install `ninja` on Windows
-          #  if: startsWith(matrix.target.id, 'windows-')
-          #  shell: bash
-          #  run: |
-          #    choco install ninja
+      - name: Install `zstd` on Windows
+        if: matrix.target.id == 'windows-amd64'
+        shell: pwsh
+        run: |
+          choco install zstandard -y
+
       - name: Setup MSVC (Windows)
         uses: ilammy/msvc-dev-cmd@v1
         if: matrix.target.id == 'windows-amd64'
@@ -97,12 +98,12 @@ jobs:
           PATH=llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH llvm-config --version
           PATH=llvm-project/build/destdir/bin:llvm-project/build/destdir/usr/bin:$PATH clang --version
 
-      - name: Zip
+      - name: Create compressed tarball
         shell: bash
         run: |
           mkdir -p dist
-          tar --directory llvm-project/build/destdir --create --xz --verbose ${{ matrix.target.tar_extra_args }} --file dist/llvm.tar.xz .
-          ls -lh dist/llvm.tar.xz
+          tar --directory llvm-project/build/destdir --create --verbose ${{ matrix.target.tar_extra_args }} --file - . | zstd -19 -T0 -o dist/llvm.tar.zst
+          ls -lh dist/llvm.tar.zst
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -139,11 +140,16 @@ jobs:
         shell: bash
         run: |
           mkdir upload
-          mv artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-amd64.tar.xz
-          mv artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-linux-aarch64.tar.xz
-          mv artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-amd64.tar.xz
-          mv artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-darwin-aarch64.tar.xz
-          mv artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.xz upload/llvm-windows-amd64.tar.xz
+          mv artifacts/linux-amd64-${{matrix.llvm_version}}/llvm.tar.zst upload/llvm-linux-amd64.tar.zst
+          mv artifacts/linux-aarch64-${{matrix.llvm_version}}/llvm.tar.zst upload/llvm-linux-aarch64.tar.zst
+          mv artifacts/darwin-amd64-${{matrix.llvm_version}}/llvm.tar.zst upload/llvm-darwin-amd64.tar.zst
+          mv artifacts/darwin-aarch64-${{matrix.llvm_version}}/llvm.tar.zst upload/llvm-darwin-aarch64.tar.zst
+          mv artifacts/windows-amd64-${{matrix.llvm_version}}/llvm.tar.zst upload/llvm-windows-amd64.tar.zst
+
+          cd upload
+          for archive in *.tar.zst; do
+            sha256sum "$archive" > "$archive.sha256"
+          done
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
