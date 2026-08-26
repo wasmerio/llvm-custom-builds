@@ -52,24 +52,24 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
       <td rowspan="5">23.1.0</td>
       <td rowspan="3">amd64</td>
       <td>Darwin</td>
-      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-darwin-amd64.tar.xz">download</a></td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-darwin-amd64.tar.zst">download</a></td>
     </tr>
     <tr>
       <td>Linux</td>
-      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-linux-amd64.tar.xz">download</a></td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-linux-amd64.tar.zst">download</a></td>
     </tr>
     <tr>
       <td>Windows</td>
-      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-windows-amd64.tar.xz">download</a></td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-windows-amd64.tar.zst">download</a></td>
     </tr>
     <tr>
       <td rowspan="2">aarch64</td>
       <td>Linux</td>
-      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-linux-aarch64.tar.xz">download</a></td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-linux-aarch64.tar.zst">download</a></td>
     </tr>
     <tr>
       <td>Darwin</td>
-      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-darwin-aarch64.tar.xz">download</a></td>
+      <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-darwin-aarch64.tar.zst">download</a></td>
     </tr>
   <tr>
       <td rowspan="5">22.1.6</td>
