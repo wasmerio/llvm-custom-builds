@@ -49,7 +49,7 @@ assets](https://github.com/wasmerio/llvm-custom-builds/releases).
   </thead>
   <tbody>
   <tr>
-      <td rowspan="5">23.1.0-rc3</td>
+      <td rowspan="5">23.1.0</td>
       <td rowspan="3">amd64</td>
       <td>Darwin</td>
       <td><a href="https://github.com/wasmerio/llvm-custom-builds/releases/download/23.x/llvm-darwin-amd64.tar.xz">download</a></td>
